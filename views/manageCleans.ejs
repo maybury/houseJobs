@@ -1,0 +1,76 @@
+<% include header.ejs%>
+<script src='/javascripts/manageCleans.js'></script>
+<link rel='stylesheet' href='/stylesheets/manageCleans.css' />
+</head>
+<body>
+<h1>Upcoming Cleans:</h1>
+<table class='pull-left'>
+<th>Description</th>
+<th>Crew Assigned</th>
+<th>Tasks</th>
+<th>Due Date</th>
+<th>Fine Date</th>
+<th>Fine Amount</th>
+<th>Action</th>
+<%for (var i=0;i<upcomingCleans.length;i++){%>
+	<tr>
+		<td style='display:none' class='id-holder'><%=upcomingCleans[i]._id%></td>
+		<td><%=upcomingCleans[i].Description%></td>
+		<td class='crew-column'>
+		<%if(upcomingCleans[i].Crew==null){%>
+			No Crew Assigned
+		<%} else{%>
+			<%=upcomingCleans[i].Crew.Description%>
+		<%}%>
+		</td>
+		<td class='task-column'><%for(var j=0;j<upcomingCleans[i].Tasks.length;j++){%>
+			<%=upcomingCleans[i].Tasks[j].Description%><br />
+			<%}%>
+		</td>
+		<td><%=moment(upcomingCleans[i].DueDate).format('MM/DD/YY hh:mm A')%></td>
+		<td><%=moment(upcomingCleans[i].FineDate).format('MM/DD/YY hh:mm A')%></td>
+		<td>$<%=upcomingCleans[i].FineAmount%></td>
+		<td><button onclick='manageCleansPage.deleteClean($(this));'>Delete</button></td>
+	</tr>
+<%}%>
+</table>
+<div class='pull-right'>
+	<div>
+		<h1>Tasks</h1>
+		<%for(var i=0; i<tasks.length;i++){%>
+			<div class='task-holder'>
+				<div class='id-holder' style='display:none'><%=tasks[i]._id%></div>
+				<%=tasks[i].Description%><br />
+			</div>
+		<%}%>
+	</div>
+	<div>
+		<h1>Crews</h1>
+		<%for(var i=0;i<crews.length;i++){%>
+		<div class='crew-holder'>
+		<div class='id-holder' style='display:none'><%=crews[i]._id%></div>
+			<%=crews[i].Description%>
+		</div>
+		<%}%>
+	</div>
+</div>
+<div class='clearfix'></div>
+<div class='pull-left'>
+<h1>Add Clean</h1>
+<div class='col-md-6'>
+	<label>Description:</label><br/>
+	<label>Due Date:</label><br/>
+	<label>Fine Date:</label><br/>
+	<label>Fine Amount:</label><br/>
+</div>
+<div class='col-md-6'>
+<input id='description' placeholder='Enter Description'/><br/>
+<input id='dueDate' placeholder='Enter Due Date' /><br/>
+<input id='fineDate' placeholder='Enter Fine Date' /><br/>
+<input id='fineAmount' placeholder='Enter Fine Amount' /><br/>
+</div>
+<button onclick='manageCleansPage.addClean()'>Add Clean</button>
+</div>
+
+
+<% include footer.ejs%>

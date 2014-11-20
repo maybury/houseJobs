@@ -1,0 +1,17 @@
+td,th{
+	border:1px solid #000000;
+}
+.task-holder, .crew-holder{
+	border: 1px solid #000000;
+	border-radius:2px;
+	margin-bottom:10px;
+}
+.selected-task,.selected-crew,.assign-crew-column,.assign-task-column{
+	background-color:#BBBBBB;
+}
+.task-holder:hover,.crew-holder:hover{
+	background-color:#DDDDDD;
+}
+.assign-crew-column:hover,.assign-task-column:hover{
+	background-color:#DDDDDD;
+}

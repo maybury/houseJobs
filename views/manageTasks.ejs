@@ -1,0 +1,23 @@
+<% include header.ejs%>
+<script type='text/javascript' src='/javascripts/manageTasks.js'></script>
+<link rel='stylesheet' href='/stylesheets/manageTasks.css' />
+</head>
+<body>
+<h1>Tasks</h1>
+<table id="tasksBox">
+	<th>Description</th>
+	<th>Action</th>
+	<%for(var i=0;i<tasks.length;i++){%>
+		<tr>
+		<div class="description-box">
+		<div class='id-holder' style="display:none"><%=tasks[i]._id%></div>
+			<td><%=tasks[i].Description%></td>
+		<td><button class="btn delete" onclick="manageTasksPage.deleteTask($(this))">Delete</button></td>
+		</div><%}%>
+</table>
+<div>
+	<h1> Add Task</h1>
+	<input id ='description' placeholder='enter description' />
+	<button class='btn' onclick='manageTasksPage.addTask()'>Add Task</button>
+</div>
+<% include footer.ejs%>

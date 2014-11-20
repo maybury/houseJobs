@@ -1,0 +1,28 @@
+<% include header.ejs%>
+<link rel='stylesheet' href='/stylesheets/manageCleaners.css' />
+<script src = '/javascripts/manageCleaners.js'></script>
+</head>
+<body>
+<div id="tasksBox">
+	<h1>Cleaners:</h1>
+	<table>
+	<th>Cleaner Name</th>
+	<th>Cleaner Email</th>
+	<th>Action</th>
+	<%for(var i=0;i<cleaners.length;i++){%>
+		<tr class='cleaner-box'>
+			<td class='id-holder' style='display:none'><%=cleaners[i]._id%></td>
+			<td id='name'><%=cleaners[i].Name%></td>
+			<td id='email'><%=cleaners[i].Email%></td>
+			<td><button class='btn' onclick='manageCleanersPage.deleteCleaner($(this))'>Delete</button></td>
+		</tr>
+	<%}%>
+	</table>
+</div>
+<div>
+	<h1> Add Cleaner</h1>
+	<input id ='nameEntry' placeholder='enter name' />
+	<input id ='emailEntry' placeholder='enter email' />
+	<button class='btn' onclick='manageCleanersPage.addCleaner()'>Add Cleaner</button>
+</div>
+<% include footer.ejs%>

@@ -1,0 +1,18 @@
+th,td{
+	border:1px solid #000000;
+}
+.cleaner-box{
+	border:1px solid #000000;
+	border-radius:2px;
+	margin-bottom:10px;
+}
+.cleaner-box:hover{
+	background-color:#EEEEEE;
+	cursor:pointer;
+	cursor:hand;
+}
+.selected-column,.selected{
+	background-color:#BBBBBB;
+	cursor:pointer;
+	cursor:hand;
+}

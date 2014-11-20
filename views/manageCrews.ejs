@@ -1,0 +1,54 @@
+<% include header.ejs%>
+<script src='/javascripts/manageCrews.js'></script>
+<link rel='stylesheet' href='/stylesheets/manageCrews.css' />
+</head>
+<body>
+<div class='crews-box pull-left'>
+	<h1>Crews</h1>
+	<table class='crew-box'>
+	<tbody>
+	<th>Crew Description</th>
+	<th>Cleaners</th>
+	<th>Action</th>
+	<%for(var i=0;i<crews.length;i++){%>
+
+		<tr>
+		<td><%=crews[i].Description%></td>
+		<div class='id-holder'style='display:none;'><%=crews[i]._id%></div>
+		<td class='cleaners-column' onclick='manageCrewsPage.assignCleaner($(this))'>
+
+			<%
+			if(cleanerNames[i].length==0){%>
+			<%="No Cleaners Assigned"%>
+			<%}else{
+
+			for(var j=0;j<cleanerNames[i].length;j++){%>
+				<%=cleanerNames[i][j].Name%><br />
+			<%}}%>
+		</td>
+		<td>
+			<div class='id-holder'style='display:none;'><%=crews[i]._id%></div>
+			<button class='btn' onclick='manageCrewsPage.deleteCrew($(this))'>Delete</button>
+		</td>
+		</tr>
+
+	<%}%>
+	</tbody>
+	</table>
+</div>
+
+<div class='cleaners-box pull-right'>
+	<h1>Cleaners:</h1>
+	<%for (var i=0; i<cleaners.length;i++){%>
+	<div class='cleaner-box' onclick = 'manageCrewsPage.focusCleaner($(this))'>
+		<%=cleaners[i].Name%>
+	</div>
+	<%}%>
+</div>
+<div class='clearfix'></div>
+<div class='pull-left'>
+	<h1>Add Crew</h1>
+	<input id='description' placeholder='enter description' />
+	<button class='btn' onclick='manageCrewsPage.addCrew()'>Add Crew</button>
+</div>
+<% include footer.ejs%>
