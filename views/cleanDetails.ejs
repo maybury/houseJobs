@@ -1,0 +1,76 @@
+<%include header.ejs%>
+<script src='/javascripts/cleanDetails.js'></script>
+</head>
+<body>
+<h1>Clean Details:</h1>
+<div>
+	<div class='clean-id' style='display:none'><%=clean._id%></div>
+	<div class='row'>
+		<label class='col-md-2'>
+			Description:
+		</label>
+	<div class='col-md-10'>
+		<%=clean.Description%>
+	</div>
+	</div>
+	<div class='row'>
+		<label class='col-md-2'>
+			Crew:
+		</label>
+	<div class='col-md-10'>
+		<%=clean.Crew.Description%>
+	</div>
+</div>
+<div class='row'>
+		<label class='col-md-2'>
+			Cleaners:
+		</label>
+	<div class='col-md-10'>
+		<%for(var i=0;i<clean.Crew.Cleaners.length;i++){%>
+			<%=clean.Crew.Cleaners[i].Name%><br/>
+		<%}%>
+	</div>
+</div>
+<div class='row'>
+		<label class='col-md-2'>
+			Due Date:
+		</label>
+	<div class='col-md-10'>
+		<%=moment(clean.DueDate).format('ddd MMM DD hh:mm A')%>
+	</div>
+</div>
+<div class='row'>
+		<label class='col-md-2'>
+			Fine Deadline:
+		</label>
+	<div class='col-md-10'>
+		<%=moment(clean.FineDate).format('ddd MMM DD hh:mm A')%>
+	</div>
+</div>
+<div class='row'>
+		<label class='col-md-2'>
+			Checked Off?
+		</label>
+	<div class='col-md-10'>
+		<%=clean.CheckedOff ? "Yes":"No"%>
+	</div>
+
+</div>
+<div class='row'>
+		<label class='col-md-2'>
+			Tasks:
+		</label>
+	<div class='col-md-10'>
+		<%for(var i=0;i<clean.Tasks.length;i++){%>
+		<div class='id-holder' style="display:none;"><%=clean.Tasks[i]._id%></div>
+		<input type='checkbox' class='clean-task-checkbox' <%if (clean.Tasks[i].Completed){%>checked<%}%>/>
+		<%=clean.Tasks[i].Description%> <br/>
+		<%}%>
+	</div>
+</div>
+<%if(clean.Status==1){%>
+<button class='btn' onclick='CleanDetailsPage.requestCheckoff()'>Request Checkoff</button>
+<%}else if(clean.Status==2){%>
+<button class='btn' disabled="true">Checkoff Requested</button>
+<%}%>
+<% include footer.ejs%>

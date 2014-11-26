@@ -1,0 +1,40 @@
+<%include header.ejs%>
+<script src="/javascripts/checkoff.js"></script>
+<link rel='stylesheet' href='/stylesheets/checkoff.css'/>
+</head>
+<h1>Check Off Jobs</h1>
+<table>
+<tr>
+	<th>Description</th>
+	<th>Crew</th>
+	<th>Unfinished Tasks</th>
+	<th>Due Date</th>
+	<th>Fine Date</th>
+	<th>Action</th>
+	</tr>
+	<%for(var i=0;i<jobs.length;i++){
+		if(jobs[i].Status=2){%>
+		<tr>
+			<td style='display:none' class='id-holder'><%=jobs[i]._id%></td>
+			<td><%=jobs[i].Description%></td>
+			<td class='crew-description'><%=jobs[i].Crew.Description%></td>
+			<td class='crew-list' style="display:none;"><%for(var j=0;j<jobs[i].CleanersToCheckoff.length;j++){%>
+			<%=jobs[i].CleanersToCheckoff[j].Name%><div class='cleaner-id-holder' style='display:none'><%=jobs[i].CleanersToCheckoff[j]._id%></div>
+			<button class='checkoffOne btn-xs'>Check Off</button>
+			<%}%></td>
+			<td>
+			<%for(var j=0;j<jobs[i].Tasks.length;j++){
+				if(!jobs[i].Tasks[j].Completed){%>
+					<%=jobs[i].Tasks[j].Description%>
+				<%}
+			}%>
+			</td>
+			<td><%=moment(jobs[i].DueDate).format('MM/DD/YY hh:mm A')%></td>
+			<td><%=moment(jobs[i].FineDate).format('MM/DD/YY hh:mm A')%></td>
+			<td><button class='btn confirm'>Confirm</button><button class='btn deny'>Deny</button></td>
+		</tr>
+	<%}}%>
+
+</table>
+<body>
+<%include footer.ejs%>

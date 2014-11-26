@@ -1,12 +1,18 @@
 <% include header.ejs %>
-
- </head>
-  <body>
-    <h1><%= title %></h1>
-    <a href='/manage/tasks'>Manage Tasks</a>
-    <a href='/manage/cleans'>Manage Jobs</a>
-    <a href='/manage/cleaners'>Manage Cleaners</a>
-    <a href='/manage/crews'>Manage Crews</a>
- 
- <% include footer.ejs %>
-
+<script src='javascripts/housejobs.js'></script>
+<link rel='stylesheet' href='stylesheets/housejobs.css'/>
+</head>
+<h1>Zeta Psi House Jobs</h1>
+<label>Filter by cleaner:</label>
+<%include _cleanersDropdown.ejs%>
+<button class='btn' onclick="houseJobsPage.filterByCleaner()">Filter</button>
+<div class='jobs-box'>
+	<h2>Upcoming Jobs:</h2>
+	<%include _upcomingJobs.ejs%>
+</div>
+<div class='jobs-box'>
+	<h2>Jobs Past Due</h2>
+	<%include _pastDueJobs.ejs %>
+</div>
+<body>
+<% include footer.ejs %>

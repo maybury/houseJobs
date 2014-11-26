@@ -1,0 +1,21 @@
+<table id="pastJobs">
+<th>Clean</th>
+<th>Crew Assigned</th>
+<th>Due Date</th>
+<%var numJobs = Math.min(pastDueJobs.length,12)
+for(var i=0;i<numJobs;i++){
+	%>
+
+	<tr class='clean-box'>
+	<td class='id-holder' style='display:none;'><%=pastDueJobs[i]._id%></td>
+		<td><%=pastDueJobs[i].Description%></td>
+		<td><%if(pastDueJobs[i].Crew==null){%>
+		<%="Unassigned"%>
+		<%}else{%>
+		<%=pastDueJobs[i].Crew.Description%>
+		<%}%>
+		</td>
+		<td><%=moment(pastDueJobs[i].dueDate).format('ddd MMM DD hh:mm A')%></td>
+	</tr>
+<%}%>
+</table>

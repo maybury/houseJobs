@@ -2,8 +2,9 @@ manageCleanersPage = {
 	addCleaner : function(){
 		var name = $("#nameEntry").val();
 		var email = $("#emailEntry").val();
+		var role = $("#roleEntry").val()
 		console.log(email);
-		$.post('/manage/addCleaner',{Name:name, Email:email},function(data){
+		$.post('/manage/addCleaner',{Name:name, Email:email, Role:role},function(data){
 			window.location.replace('/manage/Cleaners');
 		})
 	},

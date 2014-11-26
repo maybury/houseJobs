@@ -1,0 +1,24 @@
+<% include header.ejs %>
+<script type='text/javascript'>
+	var submitIdentity = function(){
+		idVal = $("#identification").val();
+		$.post('/manage/identify',{
+			Id: idVal
+		},
+		function(data){
+			if(data.success){
+				document.cookie="s="+data.s;
+				window.location.replace('/manage/cleans')
+			}
+			else{
+				window.location.replace('/')
+			}
+		})
+	}
+</script>
+ </head>
+  <body>
+    <input id='identification' placeholder='identification required'/>
+    <button class='btn' onclick='submitIdentity()'>Go</button>
+ <% include footer.ejs %>
+

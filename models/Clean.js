@@ -10,6 +10,7 @@ var CleanSchema = new Schema({
 	FineDate: Number,
 	CheckedOff: Boolean,
 	CleanersToCheckoff: [{type:ObjectId, ref:'Cleaner'}],
+	Status: Number,
 	FineAmount: Number,
 	Fined: Boolean
 	

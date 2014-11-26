@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/manage',manage)
 app.use('/users', users);
-mongodb_connection_string = 'mongodb://127.0.0.1:27017/' + 'houseJobs';
+mongodb_connection_string = 'mongodb://system:pass1@ds051990.mongolab.com:51990/housejobs';
 
 mongoose.connect(mongodb_connection_string);
 var db = mongoose.connection;
