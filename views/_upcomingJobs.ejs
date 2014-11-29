@@ -2,7 +2,7 @@
 <th>Clean</th>
 <th>Crew Assigned</th>
 <th>Due Date</th>
-<%var numJobs = Math.min(jobs.length,12)
+<%var numJobs = Math.min(jobs.length,25)
 for(var i=0;i<numJobs;i++){
 	if(jobs[i].Status==1){%>
 	<tr class='clean-box'>
@@ -16,7 +16,7 @@ for(var i=0;i<numJobs;i++){
 		</td>
 		<td class='crew-details' style='display:none'>
 			<%for(var j=0;j<jobs[i].CleanersToCheckoff.length;j++){%>
-				<%=jobs[i].CleanersToCheckoff[j].Name%>
+				<%= (j==jobs[i].CleanersToCheckoff.length-1) ? jobs[i].CleanersToCheckoff[j].Name:jobs[i].CleanersToCheckoff[j].Name+", "%>
 			<%}%>
 		</td>
 		<%}%>
