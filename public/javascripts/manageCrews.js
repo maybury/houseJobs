@@ -29,6 +29,7 @@ manageCrewsPage = {
 		if ($(object).hasClass('selected-column')){
 			var crewId = $(object).closest('tr').find('.id-holder').text();
 			var cleanerName = $('.selected').text().trim();
+			console.log(cleanerName)
 			$.post('/manage/assignCleaner',
 				{crew:crewId, cleaner:cleanerName}
 				,function(data){

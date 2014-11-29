@@ -146,7 +146,7 @@ router.post('/addTaskToClean',function(req,res){
 	})
 })
 router.post('/addCrewToClean',function(req,res){
-	Crew.findOne({id:req.body.Task}).populate('Cleaners').exec(function(err,crewAssigned){
+	Crew.findOne({_id:req.body.Crew}).populate('Cleaners').exec(function(err,crewAssigned){
 		Clean.findOne({_id:req.body.Clean},function(err,editedClean){
 			if(editedClean.Crew==null){
 				editedClean.Crew = crewAssigned._id;
@@ -212,7 +212,6 @@ router.post('/assignCleaner',function(req,res){
 			if (err==null){
 				console.log(crew.Cleaners)
 				if (crew.Cleaners!=null){
-					console.log(cleaner._id);
 					if (crew.Cleaners.indexOf(cleaner._id)==-1){
 						crew.Cleaners.push(cleaner._id);
 					}
