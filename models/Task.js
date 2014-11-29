@@ -5,6 +5,7 @@ var ObjectId = Schema.ObjectId;
 var TaskSchema = new Schema({
 	Description: String,
 	Completed: Boolean,
+	BaseId: ObjectId,
 	Base: {type:ObjectId,ref:'TaskSingleton'}
 	
 });

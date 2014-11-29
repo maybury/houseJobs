@@ -12,10 +12,12 @@ var nodemailer = require('nodemailer');
 router.get('/', function(req, res) {
 	var now = moment(Date.Now).unix()*1000;
 	Cleaner.find({}).exec(function(err,cleaners){
-		Clean.find({DueDate:{$gt:now}}).populate('Crew').populate('Cleaner').exec(function(err,upcomingJobs){
-			Clean.find({DueDate:{$lt:now},CheckedOff:false}).populate('Crew').populate('Cleaners').exec(function(err,pastDueJobs){
+		Clean.find({}).populate('Crew').populate('CleanersToCheckoff').exec(function(err,cleans){
+			Crew.populate(cleans.Crew,{path:'Cleaners'},function(err,thisCrew){
 				if(err==null){
-					res.render('index', { title: 'House Jobs', moment:moment,upcomingJobs:upcomingJobs,pastDueJobs:pastDueJobs,cleaners:cleaners });
+					console.log(cleans[0])
+					console.log(thisCrew)
+					res.render('index', { title: 'House Jobs', moment:moment,jobs:cleans,cleaners:cleaners });
 					return;
 				}
 				else{

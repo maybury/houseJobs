@@ -2,19 +2,26 @@
 <th>Clean</th>
 <th>Crew Assigned</th>
 <th>Due Date</th>
-<%var numJobs = Math.min(upcomingJobs.length,12)
-for(var i=0;i<numJobs;i++){%>
-
+<%var numJobs = Math.min(jobs.length,12)
+for(var i=0;i<numJobs;i++){
+	if(jobs[i].Status==1){%>
 	<tr class='clean-box'>
-	<td class='id-holder' style='display:none;'><%=upcomingJobs[i]._id%></td>
-		<td><%=upcomingJobs[i].Description%></td>		
-		<td><%if(upcomingJobs[i].Crew==null){%>
-		<%="Unassigned"%>
+	<td class='id-holder' style='display:none;'><%=jobs[i]._id%></td>
+		<td><%=jobs[i].Description%></td>		
+		<%if(jobs[i].Crew==null){%>
+		<td><%="Unassigned"%></td>
 		<%}else{%>
-		<%=upcomingJobs[i].Crew.Description%>
+		<td class='crew-description'>
+		<%=jobs[i].Crew.Description%>
+		</td>
+		<td class='crew-details' style='display:none'>
+			<%for(var j=0;j<jobs[i].CleanersToCheckoff.length;j++){%>
+				<%=jobs[i].CleanersToCheckoff[j].Name%>
+			<%}%>
+		</td>
 		<%}%>
 		</td>
-		<td><%=moment(upcomingJobs[i].dueDate).format('ddd MMM DD hh:mm A')%></td>
+		<td><%=moment(jobs[i].DueDate).format('ddd MMM DD hh:mm A')%></td>
 	</tr>
-<%}%>
+<%}}%>
 </table>

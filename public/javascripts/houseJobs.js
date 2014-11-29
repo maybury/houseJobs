@@ -26,8 +26,7 @@ var houseJobsPage = {
 					houseJobsPage.redrawJobsTables(data.upcomingJobs,data.pastDueJobs);
 				}
 			})	
-		}
-		
+		}	
 	}
 
 };
@@ -36,5 +35,13 @@ $(document).ready(function(){
 		var cleanId = $(this).find('.id-holder').text();
 		console.log(cleanId);
 		window.location.replace("/cleanDetails/"+cleanId)
+	});
+	$('.crew-description').hover(function(){
+		$(this).hide();
+		$(this).siblings('.crew-details').show();
+	})
+	$('.crew-details').mouseout(function(){
+		$(this).hide();
+		$(this).siblings('.crew-description').show();
 	})
 })

@@ -3,6 +3,8 @@ var hashshift = 82834;
 var Session = require('../../models/Session.js');
 var Clean = require('../../models/Clean.js');
 var Crew = require('../../models/Crew.js');
+var Cleaner = require('../../models/Cleaner.js')
+var Role = require('../../models/Role.js')
 var moment = require('moment');
 var nodemailer = require('nodemailer');
 var schedule = require('node-schedule');
@@ -115,7 +117,7 @@ var util = module.exports={
 									    to: emailList, // list of receivers
 									    subject: 'Your House Job Assignment is Due.', // Subject line
 									    text: '', // plaintext body
-									    html: '<b>Dear Cleaner, please promptly complete your current clean assignment:</b><div>Description: '+clean.Description+'.</div><div>To view the full details of this clean, please visit<a href="#">The HouseJobs System</a></div>' // html body
+									    html: '<b>Dear Cleaner, please promptly complete your current clean assignment:</b><div>Description: '+clean.Description+'.</div><div>To view the full details of this clean, please visit<a href="/cleanDetails/'+clean._id+'">The HouseJobs System</a></div>' // html body
 									};
 									transporter.sendMail(mailOptions, function(error, info){
 									    if(error){
@@ -137,6 +139,39 @@ var util = module.exports={
 			});
 		});
 	},
+	SendCheckoffConfirmationEmail:function(cleanId){
+		Clean.findOne({_id:cleanId}).populate('Crew').exec(function(err,clean){
+			Crew.populate(clean.Crew,{path:'Cleaners'},function(err,thisCrew){
+				var emailList = '';
+				for(var i=0; i<thisCrew.Cleaners.length;i++){
+					console.log(thisCrew.Cleaners[i]);
+					emailList+=thisCrew.Cleaners[i].Name+' <'+thisCrew.Cleaners[i].Email+'>, '
+				}
+				console.log(emailList);
+				var transporter = nodemailer.createTransport({
+					service: 'gmail',
+					auth: {
+		    			user: 'ZPHouseJobs@gmail.com',
+		    			pass: 'TheSuperIsMe'
+					}
+				})
+				var mailOptions = {
+				    from: 'Zeta Psi Superintendent <ZPHouseJobs@gmail.com>', // sender address
+				    to: emailList, // list of receivers
+				    subject: 'Your House Job Assignment has been checked off.', // Subject line
+				    text: '', // plaintext body
+				    html: '<b>Dear Cleaner, thank you for completing your recent house job:</b><div>Description: '+clean.Description+'.</div><div>To view the full details of this clean, please visit<a href="/cleanDetails/'+clean._id+'">The HouseJobs System</a></div>' // html body
+				};
+				transporter.sendMail(mailOptions, function(error, info){
+				    if(error){
+				        console.log('Mail Error: '+error);
+				    }else{
+				        console.log('Message sent: ' + info.response);
+				    }
+				});
+			})
+		})
+	},
 	SetupFineEmail: function(cleanId){
 		Clean.findOne({_id:cleanId}).populate('Crew').exec(function(err,clean){
 			Crew.populate(clean.Crew,{path:'Cleaners'},function(err,thisCrew){
@@ -152,37 +187,42 @@ var util = module.exports={
 							newClean.Status=CleanStatus.Incomplete;
 							var emailList = '';
 							console.log('task succeeded!');
-							if(clean!=null&&cthisCew!=null){
+							if(clean!=null&&thisCrew!=null){
 								Crew.findOne({_id:thisCrew._id}).populate('Cleaners').exec(function(err, thisCrew){
-									var emailList = '';
-									for(var i=0; i<thisCrew.Cleaners.length;i++){
-										emailList+=thisCrew.Cleaners[i].Name+' <'+thisCrew.Cleaners[i].Email+'>, '
-									}
-
-									console.log(emailList);
-									var transporter = nodemailer.createTransport({
-										service: 'gmail',
-										auth: {
-							    			user: 'ZPHouseJobs@gmail.com',
-							    			pass: 'TheSuperIsMe'
+									Cleaner.find({ $or: [{Role:Role.Super},{Role:Role.SC},{Role: Role.AlphaPhi},{Role: Role.Phi},{Role:Role.Gamma}]}).exec(function(err,admins){
+										var emailList = '';
+										for(var i=0; i<thisCrew.Cleaners.length;i++){
+											emailList+=thisCrew.Cleaners[i].Name+' <'+thisCrew.Cleaners[i].Email+'>, '
 										}
+										for(var i=0;i<admins.length;i++){
+											emailList+=admins[i].Name+ '<'+admins[i].Email+'>, '
+										}
+
+										console.log(emailList);
+										var transporter = nodemailer.createTransport({
+											service: 'gmail',
+											auth: {
+								    			user: 'ZPHouseJobs@gmail.com',
+								    			pass: 'TheSuperIsMe'
+											}
+										})
+										var mailOptions = {
+										    from: 'Zeta Psi Superintendent <ZPHouseJobs@gmail.com>', // sender address
+										    to: emailList, // list of receivers
+										    subject: 'Missed House Job Fine Notification', // Subject line
+										    text: '', // plaintext body
+										    html: '<b>Dear Cleaner, you have been fined $'+clean.FineAmount+' for missing your house job: '+clean.Description+'.</b></div><div>To view the full details of this clean, please visit<a href="/cleanDetails/'+clean._id+'">The HouseJobs System</a></div>' // html body
+										};
+										transporter.sendMail(mailOptions, function(error, info){
+										    if(error){
+										        console.log('Mail Error: '+error);
+										    }else{
+										        console.log('Message sent: ' + info.response);
+										    }
+										});
+										newClean.Fined=true;;
+										newClean.Status = CleanStatus.Fined;
 									})
-									var mailOptions = {
-									    from: 'Zeta Psi Superintendent <ZPHouseJobs@gmail.com>', // sender address
-									    to: emailList, // list of receivers
-									    subject: 'Missed House Job Fine Notification', // Subject line
-									    text: '', // plaintext body
-									    html: '<b>Dear Cleaner, you have been fined $'+clean.FineAmount+' for missing your house job: '+clean.Description+'.</b></div><div>To view the full details of this clean, please visit<a href="#">The HouseJobs System</a></div>' // html body
-									};
-									transporter.sendMail(mailOptions, function(error, info){
-									    if(error){
-									        console.log('Mail Error: '+error);
-									    }else{
-									        console.log('Message sent: ' + info.response);
-									    }
-									});
-									newClean.Fined=true;;
-									newClean.Status = CleanStatus.Fined;
 								})
 							}
 						}

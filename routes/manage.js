@@ -117,17 +117,30 @@ router.post('/addTaskToClean',function(req,res){
 	var newTask = new CleanTask();
 	Task.findOne({_id:req.body.Task},function(err,taskBase){
 		newTask.Base = taskBase._id;
+		newTask.BaseId = taskBase._id;
 		newTask.Description = taskBase.Description;
 		newTask.Completed = false;
 		newTask.save(function(err,newTask){
-			Clean.findOne({_id:req.body.Clean},function(err,editedClean){
-				editedClean.Tasks.push(newTask._id);
-				editedClean.save(function(err,editedClean){
-					if (err==null){
-						res.send({success:true});
-						return;
+			Clean.findOne({_id:req.body.Clean}).populate('Tasks').exec(function(err,editedClean){
+				var taskInClean = false;
+				for(var i=0;i<editedClean.Tasks.length;i++){
+					console.log(editedClean.Tasks[i].BaseId)
+					console.log(newTask.BaseId)
+					console.log(editedClean.Tasks[i].BaseId.equals(newTask.BaseId))
+					if (editedClean.Tasks[i].BaseId.equals(newTask.BaseId)){
+						taskInClean= true;
 					}
-				})
+				}
+				console.log(taskInClean);
+				if(!taskInClean){
+					editedClean.Tasks.push(newTask._id);
+					editedClean.save(function(err,editedClean){
+						if (err==null){
+							res.send({success:true});
+							return;
+						}
+					})
+				}
 			})
 		})
 	})
@@ -230,13 +243,14 @@ router.post('/addCleaner', function(req,res){
 	var newCleaner = new Cleaner();
 	newCleaner.Name = req.body.Name;
 	newCleaner.Email = req.body.Email;
-	newCleaner.Role = req.body.Role
-	console.log(req.body.description);
+	newCleaner.Role = req.body.Role;
+	console.log(newCleaner);
 	newCleaner.save(function(err,task){
 		if (err==null){
 			res.send({success :true})
 			return;
 		}
+		else(console.log(err))
 	})
 });
 router.post('/addCrew',function(req,res){
@@ -258,6 +272,7 @@ router.post('/ConfirmCheckoff',function(req,res){
 		clean.CleanersToCheckoff = [];
 		clean.save(function(err){
 			if (err==null){
+				Util.SendCheckoffConfirmationEmail(clean._id)
 				res.send({success:true})
 			}
 		})

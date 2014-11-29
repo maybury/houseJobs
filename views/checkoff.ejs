@@ -13,7 +13,7 @@
 	<th>Action</th>
 	</tr>
 	<%for(var i=0;i<jobs.length;i++){
-		if(jobs[i].Status=2){%>
+		if(jobs[i].Status==2){%>
 		<tr>
 			<td style='display:none' class='id-holder'><%=jobs[i]._id%></td>
 			<td><%=jobs[i].Description%></td>
