@@ -328,7 +328,7 @@ router.get('/checkoff',function(req,res){
 			Crew.populate(cleans.Crew,{path:'Cleaners'},function(err,thisCrew){
 				CleanTask.populate(cleans.Tasks,{path:'Tasks'},function(err,theseTasks){
 					Util.CheckSessionValidity(req.cookies.s,function(result){
-						res.render('Checkoff', { title: 'Checkoff', jobs: cleans,moment:moment, role:role });
+						res.render('checkoff', { title: 'Checkoff', jobs: cleans,moment:moment, role:role });
 						return;
 					})
 				})
