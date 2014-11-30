@@ -1,4 +1,4 @@
-CleanDetailsPage ={
+var CleanDetailsPage ={
 	toggleTaskCompleted : function(TaskId, value){
 		$.post('/toggleTaskCompleted',{
 			Task:TaskId,
