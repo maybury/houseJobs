@@ -242,15 +242,13 @@ var util = module.exports={
 	RestoreReminderEvents : function(){
 		console.log('restoring events');
 		Clean.remove({ $or:[{Status:CleanStatus.Fined},{Status:CleanStatus.CheckedOff}]}).exec(function(err){
-			Clean.find({Status:CleanStatus.Upcoming}).exec(function(err,upcomingCleans){
-				if (err==null){
-					for(var i=0;i<upcomingCleans.length;i++){
-						util.SetupPreReminderEmail(upcomingCleans[i]._id);
-						util.SetupDueReminderEmail(upcomingCleans[i]._id);
-						util.SetupFineEmail(upcomingCleans[i]._id);
 
+			Clean.find({Status:CleanStatus.Incomplete}).exec(function(err,incompleteCleans){
+				if(err==null){
+					for (var i=0;i<incompleteCleans.length;i++){
+						util.SetupFineEmail(incompleteCleans[i]._id)
 					}
-					console.log('upcoming cleans events restored')
+					console.log('incomplete cleans events restored')
 				}
 			})
 			Clean.find({Status:CleanStatus.Reminded}).exec(function(err,remindedCleans){
@@ -262,14 +260,19 @@ var util = module.exports={
 					console.log('reminded cleans events restored')	
 				}
 			})
-			Clean.find({Status:CleanStatus.Incomplete}).exec(function(err,incompleteCleans){
-				if(err==null){
-					for (var i=0;i<incompleteCleans.length;i++){
-						util.SetupFineEmail(incompleteCleans[i]._id)
+			Clean.find({Status:CleanStatus.Upcoming}).exec(function(err,upcomingCleans){
+				if (err==null){
+					for(var i=0;i<upcomingCleans.length;i++){
+						util.SetupPreReminderEmail(upcomingCleans[i]._id);
+						util.SetupDueReminderEmail(upcomingCleans[i]._id);
+						util.SetupFineEmail(upcomingCleans[i]._id);
+
 					}
-					console.log('incomplete cleans events restored')
+					console.log('upcoming cleans events restored')
 				}
 			})
+
+
 		})
 	}
 }
