@@ -4,7 +4,7 @@
 <th>Due Date</th>
 <%var numJobs = Math.min(jobs.length,25)
 for(var i=0;i<numJobs;i++){
-	if(jobs[i].Status==1){%>
+	if(jobs[i].Status==1||jobs[i].Status==6){%>
 	<tr class='clean-box'>
 	<td class='id-holder' style='display:none;'><%=jobs[i]._id%></td>
 		<td><%=jobs[i].Description%></td>		
