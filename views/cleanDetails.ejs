@@ -69,7 +69,7 @@
 		<%}%>
 	</div>
 </div>
-<%if(clean.Status==1 ||clean.Status==4 || clean.Status==6){%>
+<%if(clean.Status==1 ||clean.Status==3 || clean.Status==6){%>
 <button class='btn' onclick='CleanDetailsPage.requestCheckoff()'>Request Checkoff</button>
 <%}else if(clean.Status==2){%>
 <button class='btn' disabled="true">Checkoff Requested</button>
