@@ -268,6 +268,7 @@ router.post('/addCrew',function(req,res){
 router.post('/ConfirmCheckoff',function(req,res){
 	Clean.findOne({_id:req.body.cleanId}).exec(function(err,clean){
 		clean.Status = CleanStatus.CheckedOff;
+		clean.CheckedOff = true;
 		clean.CleanersToCheckoff = [];
 		clean.save(function(err){
 			if (err==null){

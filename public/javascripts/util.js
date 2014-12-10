@@ -187,7 +187,7 @@ var util = module.exports={
 				console.log(reminderDate)
 				var reminder = schedule.scheduleJob(reminderDate,function(){
 					Clean.findOne({_id:clean.id}).exec(function(err,newClean){
-						if (!newClean.CheckedOff&&!newClean.Fined){
+						if (!newClean.CheckedOff&&!newClean.Fined&&(!newClean.Status==CleanStatus.CheckedOff)){
 							newClean.Status=CleanStatus.Incomplete;
 							var emailList = '';
 							console.log('task succeeded!');
