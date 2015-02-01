@@ -98,7 +98,24 @@ router.post('/addClean',function(req,res){
 	CleanTemplate.findOne({_id:req.body.templateId}).populate('BaseTasks').exec(function(err,template){
 		console.log(template);
 		console.log(template.BaseTasks);
-		var cleanTasks = []
+		var cleanTasks = [];
+		var task;
+		for(var i=0;i<template.BaseTasks.length;i++){
+			task=null;
+			task = new CleanTask();
+			task.BaseId = template.BaseTasks[i]._id;
+			task.Base = template.BaseTasks[i]._id;
+			task.Description = template.BaseTasks[i].Description;
+			task.Completed = false;
+
+			task.save(function(err, task){
+				cleanTasks.push(task._id)
+				console.log(cleanTasks);
+				if (cleanTasks.length==template.BaseTasks.length){
+					cleanCallback(req.body,cleanTasks)
+				}
+			});
+		}
 		var cleanCallback = function(body, tasks){
 			var newClean = new Clean();
 			newClean.Description = req.body.Description;
@@ -113,24 +130,12 @@ router.post('/addClean',function(req,res){
 			newClean.Status = CleanStatus.Upcoming;
 			newClean.save(function(err,clean){
 				if (err==null){
+					console.log(newClean);
 					res.send({success:true});
 					return;
 				}
 			})
 		};
-		for(var i=0;i<template.BaseTasks.length;i++){
-			var task = new CleanTask();
-			task.BaseId = template.BaseTasks[i]._id;
-			task.Base = template.BaseTasks[i]._id;
-			task.Description = template.BaseTasks[i].Description;
-			task.Completed = false;
-			task.save(function(err){
-				cleanTasks.push(task._id)
-				if (cleanTasks.length==template.BaseTasks.length){
-					cleanCallback(req.body,cleanTasks)
-				}
-			});
-		}
 	})
 });
 

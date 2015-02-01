@@ -19,8 +19,8 @@ manageCrewsPage = {
 		});
 	},
 	removeCleaner :function(object){
-		var crewId = $(object).closest('tr').find('.id-holder').text();
-		var cleanerId = $(object).siblings('.crew-names').find('.cleaner-id').text().trim();
+		var crewId = $(object).closest('tr').find('.id-holder').text().trim();
+		var cleanerId = $(object).closest('.crew-cleaner').find('.cleaner-id').text().trim();
 		console.log(crewId);
 		console.log(cleanerId);
 		$.post('/manage/removeCleanerFromCrew',

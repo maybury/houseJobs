@@ -106,5 +106,10 @@ router.get('/cleanDetails/*',function(req,res){
 
 	})
 })
-
+router.get('/overview', function(req,res){
+	Clean.find({Status:{$in:[CleanStatus.Upcoming,CleanStatus.Reminded]}}).populate('Crew').populate('CleanersToCheckoff').exec(function(err,cleans){
+		res.render('overview', {title: 'weekly overview',moment:moment, cleans:cleans});
+		return;
+	})
+})
 module.exports = router;

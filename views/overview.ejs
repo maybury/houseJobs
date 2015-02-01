@@ -1,0 +1,22 @@
+<%include header.ejs%>
+</head>
+<body>
+<table>
+	<th>Clean</th>
+	<th>Cleaners</th>
+	<th>Due Date</th>
+	<th>Fine Date</th>
+	<%for(var i=0;i<cleans.length;i++){%>
+		<tr>
+			<td><%=cleans[i].Description%></td>
+			<td>
+				<%for(var j=0;j<cleans[i].CleanersToCheckoff.length;j++){%>
+					<%=cleans[i].CleanersToCheckoff[j].Name%>
+				<%}%>
+			</td>
+			<td><%=moment(cleans[i].DueDate).format('ddd MMM DD hh:mm A')%></td>
+			<td><%=moment(cleans[i].FineDate).format('ddd MMM DD hh:mm A')%></td>
+		</tr>
+	<%}%>
+</table>
+<%include footer.ejs%>
