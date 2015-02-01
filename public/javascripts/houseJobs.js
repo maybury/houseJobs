@@ -14,6 +14,7 @@ var houseJobsPage = {
 
 	},
 	filterByCleaner: function(){
+		$("#loading-overlay").show()
 		cleanerId = $("#cleanerDropdown").val();
 		if (cleanerId=="clear"){
 			window.location.replace('/')
@@ -22,8 +23,8 @@ var houseJobsPage = {
 			$.post('/getJobsByCleanerId',{cleanerId:cleanerId},function(data){
 				console.log(data);
 				if (data.success){
-
 					houseJobsPage.redrawJobsTables(data.upcomingJobs,data.pastDueJobs);
+					$("#loading-overlay").hide()
 				}
 			})	
 		}	
@@ -31,17 +32,22 @@ var houseJobsPage = {
 
 };
 $(document).ready(function(){
+	$("#loading-overlay").show()
 	$('.clean-box').click(function(){
 		var cleanId = $(this).find('.id-holder').text();
 		console.log(cleanId);
 		window.location.replace("/cleanDetails/"+cleanId)
 	});
-	$('.crew-description').hover(function(){
-		$(this).hide();
-		$(this).siblings('.crew-details').show();
-	})
-	$('.crew-details').mouseout(function(){
-		$(this).hide();
-		$(this).siblings('.crew-description').show();
-	})
+	$('.description-column').hover(
+		function(){
+			$(this).find('.crew-description').hide();
+			$(this).find('.crew-details').show();
+			console.log('show')
+		}, 
+		function(){
+			$(this).find('.crew-description').show();
+			$(this).find('.crew-details').hide();
+			console.log('hide');
+		})
+	$("#loading-overlay").hide()
 })

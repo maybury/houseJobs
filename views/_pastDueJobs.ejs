@@ -1,4 +1,4 @@
-<table id="pastJobs">
+<table id="pastJobs" class='col-md-10 col-md-offset-1'>
 <th>Clean</th>
 <th>Crew Assigned</th>
 <th>Fine Date</th>
@@ -13,13 +13,15 @@ for(var i=0;i<numJobs;i++){
 		<%if(jobs[i].Crew==null){%>
 		<td><%="Unassigned"%></td>
 		<%}else{%>
-		<td class='crew-description'>
-		<%=jobs[i].Crew.Description%>
-		</td>
-		<td class='crew-details' style='display:none'>
-			<%for(var j=0;j<jobs[i].CleanersToCheckoff.length;j++){%>
-				<%=(j==jobs[i].CleanersToCheckoff.length)? jobs[i].Crew.CleanersToCheckoff[j].Name : jobs[i].CleanersToCheckoff[j].Name+", "%>, 
-			<%}%>
+		<td class='description-column'>
+			<div class='crew-description'>
+				<%=jobs[i].Crew.Description%>
+			</div>
+			<div class='crew-details' style='display:none'>
+				<%for(var j=0;j<jobs[i].CleanersToCheckoff.length;j++){%>
+					<%=(j==jobs[i].CleanersToCheckoff.length)? jobs[i].Crew.CleanersToCheckoff[j].Name : jobs[i].CleanersToCheckoff[j].Name+", "%>, 
+				<%}%>
+			</div>
 		</td>
 		<%}%>
 		<td><%=moment(jobs[i].FineDate).format('ddd MMM DD hh:mm A')%></td>

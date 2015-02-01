@@ -1,24 +1,23 @@
 body{
-	background-color:#FFFA00;
+	background-color:#F5F5F5;
 	font-family:helvetica;
-	color:#999999;
+	color:#333333;
 	margin:20px;
 }
 h1,table{
 	text-align:center;
 }
 table{
-	border:1px solid #222222;
 	border-radius:2px;
 	max-width:85%;
 }
 th{
-	border-bottom:1px solid #000000;
+	border-bottom:1px solid #AAAAAA;
 	padding:5px 0;
 	text-align:center;
 }
 td{
-	border-bottom:1px solid #444444;
+	border-bottom:1px solid #DDDDDD;
 	padding:2px 0;
 }
 td,th{
@@ -27,7 +26,7 @@ td,th{
 	color:#444444;
 }
 button, .btn{
-	background-color:#FFFB00;
+	background-color:#BBBBBB;
 	border:1px solid #AAAAAA;
 	transition:0.3s;
 }
@@ -41,4 +40,29 @@ input{
 }
 .clean-box td:hover{
 	cursor:hand;
+}
+.jobs-box{
+	text-align:center;
+}
+#cleanerDropdown{
+	margin-top:6px;
+	margin-right:10px;
+}
+#loading-overlay{
+	position:absolute;
+	height:100%;
+	width:100%;
+	opacity:0.7;
+	padding-top:15%;
+	background-color:#888888;
+	color:#000000;
+	top:0;
+	left:0;
+
+}
+.admin-links{
+	text-align:center;
+}
+.admin-links a{
+	color:#CCCC00;
 }

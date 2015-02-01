@@ -10,8 +10,9 @@ var moment = require('moment');
 var Util = require('../public/javascripts/util.js');
 var Session = require('../models/Session.js');
 var CleanStatus = require('../models/CleanStatus.js');
-var role = require('../models/Role.js')
-var code = "pass1"
+var role = require('../models/Role.js');
+var CleanTemplate = require('../models/CleanTemplate.js');
+var code = "pass1";
 
 var mongoose = require('mongoose');
 
@@ -94,25 +95,83 @@ router.post('/deleteClean',function(req,res){
 	})
 })
 router.post('/addClean',function(req,res){
-	var newClean = new Clean();
-	newClean.Description = req.body.Description;
-	newClean.Crew = null;
-	newClean.Tasks = [];
-	newClean.DueDate = req.body.DueDate;
-	newClean.FineDate = req.body.FineDate;
-	newClean.CheckedOff=false;
-	newClean.CleanersToCheckoff = [];
-	newClean.FineAmount = req.body.FineAmount;
-	newClean.Fined = false;
-	newClean.Status = CleanStatus.Upcoming;
-	newClean.save(function(err,clean){
-		if (err==null){
-			
-			res.send({success:true});
-			return;
+	CleanTemplate.findOne({_id:req.body.templateId}).populate('BaseTasks').exec(function(err,template){
+		console.log(template);
+		console.log(template.BaseTasks);
+		var cleanTasks = []
+		var cleanCallback = function(body, tasks){
+			var newClean = new Clean();
+			newClean.Description = req.body.Description;
+			newClean.Crew = null;
+			newClean.Tasks = cleanTasks;
+			newClean.DueDate = req.body.DueDate;
+			newClean.FineDate = req.body.FineDate;
+			newClean.CheckedOff=false;
+			newClean.CleanersToCheckoff = [];
+			newClean.FineAmount = req.body.FineAmount;
+			newClean.Fined = false;
+			newClean.Status = CleanStatus.Upcoming;
+			newClean.save(function(err,clean){
+				if (err==null){
+					res.send({success:true});
+					return;
+				}
+			})
+		};
+		for(var i=0;i<template.BaseTasks.length;i++){
+			var task = new CleanTask();
+			task.BaseId = template.BaseTasks[i]._id;
+			task.Base = template.BaseTasks[i]._id;
+			task.Description = template.BaseTasks[i].Description;
+			task.Completed = false;
+			task.save(function(err){
+				cleanTasks.push(task._id)
+				if (cleanTasks.length==template.BaseTasks.length){
+					cleanCallback(req.body,cleanTasks)
+				}
+			});
 		}
 	})
 });
+
+router.post('/addTemplate',function(req,res){
+	if (req.cookies.s!=null){
+		Util.CheckSessionValidity(req.cookies.s,function(result){
+			var template = new CleanTemplate();
+			template.Description = req.body.description;
+			template.BaseTasks = [];
+			template.save(function(err,template){
+				if(err==null){
+					res.send({success:true});
+					return;
+				}
+			})
+		})
+	}
+	else{
+		res.redirect('/manage');
+	}
+})
+router.post('/addTemplateTask',function(req,res){
+		if (req.cookies.s!=null){
+		Util.CheckSessionValidity(req.cookies.s,function(result){
+			console.log(req.body.templateId);
+			CleanTemplate.findOne({_id:req.body.templateId}).exec(function(err,cleanTemplate){
+				console.log(cleanTemplate);
+				cleanTemplate.BaseTasks.push(req.body.taskId);
+				cleanTemplate.save(function(err){
+					if (err==null){
+						res.send({success:true});
+						return;
+					}
+				})
+			})
+		})
+	}
+	else{
+		res.redirect('/manage');
+	}
+})
 router.post('/addTaskToClean',function(req,res){
 	var newTask = new CleanTask();
 	Task.findOne({_id:req.body.Task},function(err,taskBase){
@@ -300,21 +359,49 @@ router.post('/DenyCheckoff',function(req,res){
 		})
 	})
 })
+router.get('/cleanTemplates', function(req,res){
+	if(req.cookies.s!=null){
+		Util.CheckSessionValidity(req.cookies.s,function(result){
+			Task.find({}).exec(function(err, Tasks){
+				CleanTemplate.find({}).populate('BaseTasks','Description').exec(function(err,cleanTemplates){
+					if (err==null){
+						res.render('manageCleanTemplates', {title: 'manageCleanTemplates', tasks:Tasks, cleanTemplates:cleanTemplates})
+					}
+				})
+			})
+		})
+	}
+	else{
+		res.redirect('/manage')
+	}
+})
 router.get('/cleans', function(req, res) {
 	if (req.cookies.s!=null){
 		Util.CheckSessionValidity(req.cookies.s,function(result){
 			Task.find({}).exec(function(err, Tasks){
-				Crew.find({}).exec(function(err,Crews){
-					var currentTime = Date.now()
-					console.log(currentTime);
-					Clean.find({Status:CleanStatus.Upcoming}).populate('Crew','Description').populate('Tasks').populate('CleanersToCheckoff').exec(function(err,Cleans){
-						if(err==null){
-							res.render('manageCleans', { title: 'Manage Cleans', crews:Crews, tasks:Tasks, upcomingCleans:Cleans, moment:moment});
-						}
-						else{
-							console.log(err);
-						}
-					});
+				CleanTemplate.find({}).exec(function(err,cleanTemplates){
+					Crew.find({}).exec(function(err,Crews){
+						var currentTime = Date.now()
+						console.log(currentTime);
+						Clean.find({Status:CleanStatus.Upcoming}).populate('Crew','Description').populate('Tasks').populate('CleanersToCheckoff').exec(function(err,Cleans){
+							Clean.find(
+								{Status:
+									{$in: 
+									[CleanStatus.Fined, 
+									CleanStatus.CheckoffRequested,
+									CleanStatus.Incomplete,CleanStatus.CheckedOff,
+									CleanStatus.Reminded]
+									}
+								}).populate('Crew','Description').populate('Tasks').populate('CleanersToCheckoff').exec(function(err,currentCleans){
+									if(err==null){
+										res.render('manageCleans', { title: 'Manage Cleans', crews:Crews, tasks:Tasks, currentCleans:currentCleans,templates:cleanTemplates, upcomingCleans:Cleans, moment:moment});
+									}
+									else{
+										console.log(err);
+									}
+							});
+						});
+					})
 				})
 			})
 		})
@@ -323,6 +410,28 @@ router.get('/cleans', function(req, res) {
 		res.redirect('/manage')
 	}
 });
+router.post('/removeCleanerFromCrew',function(req,res){
+	if (req.cookies.s!=null){
+		Util.CheckSessionValidity(req.cookies.s,function(result){
+			Cleaner.findOne({_id:req.body.cleanerId}).exec(function(err,cleaner){
+				Crew.findOne({_id:req.body.crewId}).exec(function(err,crew){
+					var index = crew.Cleaners.indexOf(cleaner._id);
+					console.log(index);
+					crew.Cleaners.splice(index, 1);
+					crew.save(function(err){
+						if (err==null){
+							res.send({success:1});
+							return;
+						}
+					})
+				})
+			})
+		})
+	}
+	else{
+		res.redirect('/manage');
+	}
+})
 router.get('/checkoff',function(req,res){
 	if (req.cookies.s!=null){
 		Clean.find({}).populate('Crew').populate('Tasks').populate('CleanersToCheckoff').exec(function(err,cleans){
@@ -362,10 +471,10 @@ router.get('/crews', function(req, res) {
 				for (var i =0;i<Crews.length;i++){
 					var crewCleaners = Crews[i].Cleaners;
 					cleanerNames.push(crewCleaners);
-					console.log(crewCleaners);
+					//console.log(crewCleaners);
 					
 				}
-				console.log(cleanerNames);
+				//console.log(cleanerNames);
 
 				if(err==null){
 					Cleaner.find({}).exec(function(err,Cleaners){

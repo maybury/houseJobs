@@ -1,14 +1,12 @@
 <% include header.ejs%>
-<script type='text/javascript' src='/javascripts/manageTasks.js'></script>
+<script type='text/javascript' src='/javascripts/manageCleanTemplates.js'></script>
 <link rel='stylesheet' href='/stylesheets/housejobs.css' />
-<link rel='stylesheet' href='/stylesheets/manageTasks.css' />
 </head>
 <body>
-<% include _adminToolBar.ejs %>
-<h1>Tasks</h1>
+<h1>Clean Templates</h1>
 <table id="tasksBox">
 	<th>Description</th>
-	<th>Action</th>
+	<th>Base Tasks</th>
 	<%for(var i=0;i<tasks.length;i++){%>
 		<tr>
 		<div class="description-box">

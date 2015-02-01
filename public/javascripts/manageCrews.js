@@ -18,6 +18,19 @@ manageCrewsPage = {
 			window.location.replace('/manage/crews');
 		});
 	},
+	removeCleaner :function(object){
+		var crewId = $(object).closest('tr').find('.id-holder').text();
+		var cleanerId = $(object).siblings('.crew-names').find('.cleaner-id').text().trim();
+		console.log(crewId);
+		console.log(cleanerId);
+		$.post('/manage/removeCleanerFromCrew',
+		{
+			crewId:crewId,
+			cleanerId:cleanerId
+		},function(){
+			window.location.replace('/manage/crews');
+		});
+	},
 	focusCleaner : function(object){
 		console.log(object);
 		$('.cleaner-box').removeClass('selected');

@@ -46,6 +46,7 @@ router.post('/getJobsByCleanerId',function(req,res){
 router.post('/toggleTaskCompleted',function(req,res){
 	Task.findOne({_id:req.body.Task}).exec(function(err,currentTask){
 		currentTask.Completed = req.body.Completed;
+		console.log(req.body.Completed)
 		currentTask.save(function(err,task){
 			if (err==null){
 				res.send({success:true});

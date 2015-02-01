@@ -2,17 +2,24 @@
 <script src='javascripts/houseJobs.js'></script>
 <link rel='stylesheet' href='/stylesheets/housejobs.css'/>
 </head>
-<h1>Zeta Psi House Jobs</h1>
-<label>Filter by cleaner:</label>
-<%include _cleanersDropdown.ejs%>
-<button class='btn' onclick="houseJobsPage.filterByCleaner()">Filter</button>
-<div class='jobs-box'>
+<div class='container'>
+
+<h1 class='row'>Zeta Psi House Jobs</h1>
+<label class='col-md-1 col-md-offset-4'>Filter by cleaner:</label>
+<div class='row'>
+	
+	<%include _cleanersDropdown.ejs%>
+
+<button class='btn col-md-1' onclick="houseJobsPage.filterByCleaner()">Filter</button>
+</div>
+<div class='jobs-box row'>
 	<h2>Upcoming Jobs:</h2>
 	<%include _upcomingJobs.ejs%>
 </div>
-<div class='jobs-box'>
+<div class='jobs-box row'>
 	<h2>Jobs Past Due</h2>
 	<%include _pastDueJobs.ejs %>
+</div>
 </div>
 <body>
 <% include footer.ejs %>

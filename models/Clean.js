@@ -5,6 +5,7 @@ var ObjectId = Schema.ObjectId;
 var CleanSchema = new Schema({
 	Description: String,
 	Crew: {type: ObjectId, ref: 'Crew'},
+	TemplateId: {type:ObjectId, ref: 'CleanTemplate'},
 	Tasks: [{type:ObjectId, ref:'Task'}],
 	DueDate: Number,
 	FineDate: Number,

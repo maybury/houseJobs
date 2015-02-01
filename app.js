@@ -31,7 +31,14 @@ mongodb_connection_string = 'mongodb://system:pass1@ds051990.mongolab.com:51990/
 
 mongoose.connect(mongodb_connection_string);
 var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+db.on('error', app.use(function(req,res,next){
+    var err = new Error('Databse Connection Error');
+    err.status = 500;
+    res.render('error',{
+        message: "Check DB Connection",
+        error:err
+    });
+}));
 db.once('open', function callback(){
     console.log('database connection confirmed');
     Util.RestoreReminderEvents();
@@ -78,4 +85,15 @@ app.use(function(err, req, res, next) {
 });
 
 
+/*By the way, here's the account info because fuck security:
+
+GMAIL: ZPHouseJobs@gmail.com
+password:TheSuperIsMe
+
+MONGOLAB: ZPSuper
+password: iamsuper1
+
+OPENSHIFT maybury@mit.edu
+
+*/
 module.exports = app;

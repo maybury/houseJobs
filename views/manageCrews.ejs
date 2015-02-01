@@ -4,6 +4,7 @@
 <link rel='stylesheet' href='/stylesheets/manageCrews.css' />
 </head>
 <body>
+<% include _adminToolBar.ejs %>
 <div class='crews-box pull-left'>
 	<h1>Crews</h1>
 	<table class='crew-box'>
@@ -24,7 +25,12 @@
 			<%}else{
 
 			for(var j=0;j<cleanerNames[i].length;j++){%>
+				<div class='crew-names'>
 				<%=cleanerNames[i][j].Name%><br />
+					<div class='cleaner-id' style="display:none"><%=cleanerNames[i][j]._id%>
+					</div>
+				</div>
+				<button onclick='manageCrewsPage.removeCleaner($(this))'>remove</button>
 			<%}}%>
 		</td>
 		<td>

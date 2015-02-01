@@ -1,12 +1,14 @@
 
 var manageCleansPage ={
 	addClean : function(){
+		var templateId = $("#template").val();
 		var description = $("#description").val();
 		var dueDate = moment($("#dueDate").val()).unix()*1000;
 		var fineDate = moment($("#fineDate").val()).unix()*1000;
 		var fineAmount = $("#fineAmount").val();
 		
 		$.post('/manage/addClean',{
+			templateId : templateId,
 			Description: description,
 			DueDate : dueDate,
 			FineDate : fineDate,

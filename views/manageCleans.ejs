@@ -4,6 +4,8 @@
 <link rel='stylesheet' href='/stylesheets/manageCleans.css' />
 </head>
 <body>
+<% include _adminToolBar.ejs %>
+
 <h1>Upcoming Cleans:</h1>
 <table class='pull-left'>
 <th>Description</th>
@@ -35,6 +37,7 @@
 	</tr>
 <%}%>
 </table>
+
 <div class='pull-right'>
 	<div>
 		<h1>Tasks</h1>
@@ -56,16 +59,57 @@
 	</div>
 </div>
 <div class='clearfix'></div>
+
+
+<h1>Current Cleans:</h1>
+<table class='pull-left'>
+<th>Description</th>
+<th>Crew Assigned</th>
+<th>Tasks</th>
+<th>Due Date</th>
+<th>Fine Date</th>
+<th>Fine Amount</th>
+<th>Action</th>
+<%for (var i=0;i<currentCleans.length;i++){%>
+	<tr>
+		<td style='display:none' class='id-holder'><%=currentCleans[i]._id%></td>
+		<td><%=currentCleans[i].Description%></td>
+		<td class='crew-column'>
+		<%if(currentCleans[i].Crew==null){%>
+			No Crew Assigned
+		<%} else{%>
+			<%=currentCleans[i].Crew.Description%>
+		<%}%>
+		</td>
+		<td class='task-column'><%for(var j=0;j<currentCleans[i].Tasks.length;j++){%>
+			<%=currentCleans[i].Tasks[j].Description%><br />
+			<%}%>
+		</td>
+		<td><%=moment(currentCleans[i].DueDate).format('MM/DD/YY hh:mm A')%></td>
+		<td><%=moment(currentCleans[i].FineDate).format('MM/DD/YY hh:mm A')%></td>
+		<td>$<%=currentCleans[i].FineAmount%></td>
+		<td><button onclick='manageCleansPage.deleteClean($(this));'>Delete</button></td>
+	</tr>
+<%}%>
+</table>
+<div class='clearfix'></div>
+
 <div class='pull-left'>
 <h1>Add Clean</h1>
 <div class='col-md-6'>
-	<label>Description:</label><br/>
+	<label>Template</label><br/>
+	<label>Description</label><br/>
 	<label>Due Date:</label><br/>
 	<label>Fine Date:</label><br/>
 	<label>Fine Amount:</label><br/>
 </div>
 <div class='col-md-6'>
-<input id='description' placeholder='Enter Description'/><br/>
+<select id='template'>
+	<%for(var i=0;i<templates.length;i++){%>
+		<option value=<%=templates[i]._id%> ><%=templates[i].Description%></option>
+	<%}%>
+</select><br/>
+<input id='description' placeholder='Enter Description' /><br/>
 <input id='dueDate' placeholder='Enter Due Date' /><br/>
 <input id='fineDate' placeholder='Enter Fine Date' /><br/>
 <input id='fineAmount' placeholder='Enter Fine Amount' /><br/>
