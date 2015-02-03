@@ -71,7 +71,7 @@ var util = module.exports={
 							    to: emailList, // list of receivers
 							    subject: 'Reminder of upcoming House Job', // Subject line
 							    text: '', // plaintext body
-							    html: '<b>Dear Cleaner, please make note of your upcoming clean assignment:</b><div>Description: '+clean.Description+'.</div><div>To view the full details of this clean, please visit<a href="http://zphousejobs-maybury.rhcloud.com/cleanDetails/'+clean._id+'">The HouseJobs System</a></div>' // html body
+							    html: '<b>Dear Cleaner, please make note of your upcoming clean assignment:</b><div>Description: '+clean.Description+'.</div><div>To view the full details of this clean, please visit<a href="http://zphousejobs.herokuapp.com/cleanDetails/'+clean._id+'">The HouseJobs System</a></div>' // html body
 							};
 							transporter.sendMail(mailOptions, function(error, info){
 							    if(error){
@@ -121,7 +121,7 @@ var util = module.exports={
 									    to: emailList, // list of receivers
 									    subject: 'Your House Job Assignment is Due.', // Subject line
 									    text: '', // plaintext body
-									    html: '<b>Dear Cleaner, please promptly complete your current clean assignment:</b><div>Description: '+clean.Description+'.</div><div>To view the full details of this clean, please visit<a href="http://zphousejobs-maybury.rhcloud.com/cleanDetails/'+clean._id+'">The HouseJobs System</a></div>' // html body
+									    html: '<b>Dear Cleaner, please promptly complete your current clean assignment:</b><div>Description: '+clean.Description+'.</div><div>To view the full details of this clean, please visit<a href="http://zphousejobs.herokuapp.com/cleanDetails/'+clean._id+'">The HouseJobs System</a></div>' // html body
 									};
 									transporter.sendMail(mailOptions, function(error, info){
 									    if(error){
@@ -164,7 +164,7 @@ var util = module.exports={
 				    to: emailList, // list of receivers
 				    subject: 'Your House Job Assignment has been checked off.', // Subject line
 				    text: '', // plaintext body
-				    html: '<b>Dear Cleaner, thank you for completing your recent house job:</b><div>Description: '+clean.Description+'.</div><div>To view the full details of this clean, please visit<a href="http://zphousejobs-maybury.rhcloud.com/cleanDetails/'+clean._id+'">The HouseJobs System</a></div>' // html body
+				    html: '<b>Dear Cleaner, thank you for completing your recent house job:</b><div>Description: '+clean.Description+'.</div><div>To view the full details of this clean, please visit<a href="http://zphousejobs.herokuapp.com/cleanDetails/'+clean._id+'">The HouseJobs System</a></div>' // html body
 				};
 				transporter.sendMail(mailOptions, function(error, info){
 				    if(error){
@@ -215,7 +215,7 @@ var util = module.exports={
 										    to: emailList, // list of receivers
 										    subject: 'Missed House Job Fine Notification', // Subject line
 										    text: '', // plaintext body
-										    html: '<b>Dear Cleaner, you have been fined $'+clean.FineAmount+' for missing your house job: '+clean.Description+'.</b></div><div>To view the full details of this clean, please visit<a href="http://zphousejobs-maybury.rhcloud.com/cleanDetails/'+clean._id+'">The HouseJobs System</a></div>' // html body
+										    html: '<b>Dear Cleaner, you have been fined $'+clean.FineAmount+' for missing your house job: '+clean.Description+'.</b></div><div>To view the full details of this clean, please visit<a href="http://zphousejobs.herokuapp.com/cleanDetails/'+clean._id+'">The HouseJobs System</a></div>' // html body
 										};
 										transporter.sendMail(mailOptions, function(error, info){
 										    if(error){
