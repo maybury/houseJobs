@@ -93,7 +93,7 @@ password:TheSuperIsMe
 MONGOLAB: ZPSuper
 password: iamsuper1
 
-OPENSHIFT maybury@mit.edu
+Heroku: ZPHouseJobs@gmail.com
 
 */
 module.exports = app;
