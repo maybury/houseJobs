@@ -3,7 +3,7 @@ var checkoffPage ={
 		$.post("/manage/ConfirmCheckoff",{
 			cleanId:id
 		},function(){
-			window.location.replace('/manage/cleans')
+			window.location.replace('/manage/checkoff')
 		})
 	},
 	DenyCheckoff: function(id){
