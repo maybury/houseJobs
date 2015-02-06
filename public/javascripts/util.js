@@ -180,7 +180,8 @@ var util = module.exports={
 		Clean.findOne({_id:cleanId}).populate('Crew').exec(function(err,clean){
 			Crew.populate(clean.Crew,{path:'Cleaners'},function(err,thisCrew){
 				var emailList = '';
-				for(var i=0; i<thisCrew.Cleaners.length;i++){
+				if ((thisCrew!=null && clean!=null)){
+					for(var i=0; i<thisCrew.Cleaners.length;i++){
 					emailList+=thisCrew.Cleaners[i].Name+' <'+thisCrew.Cleaners[i].Email+'>, '
 				}
 				var reminderDate = new Date(clean.FineDate);
@@ -236,6 +237,8 @@ var util = module.exports={
 					})	
 					
 				})
+				}
+				
 			});
 		});
 	},
